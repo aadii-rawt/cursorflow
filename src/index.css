@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-background: #101114;
+  --bg-secondary: #181A20;
+  --bg-card: #20232B;
+  --bg-card-hover: #272B35;
+  --border-card: #2D323E;
+  --text-primary: #F8FAFC;
+  --text-muted: #94A3B8;
+  --text-subtle: #64748B;
+}
+
+html.light {
+  --bg-background: #F8FAFC;
+  --bg-secondary: #F1F5F9;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F8FAFC;
+  --border-card: #E2E8F0;
+  --text-primary: #0F172A;
+  --text-muted: #64748B;
+  --text-subtle: #94A3B8;
+}
+
+html.dark {
+  --bg-background: #101114;
+  --bg-secondary: #181A20;
+  --bg-card: #20232B;
+  --bg-card-hover: #272B35;
+  --border-card: #2D323E;
+  --text-primary: #F8FAFC;
+  --text-muted: #94A3B8;
+  --text-subtle: #64748B;
+}
+
+@layer base {
+  * {
+    @apply border-card-border;
+  }
+  body {
+    @apply bg-background text-text-primary antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.4);
+}
+
+/* Electron draggable region support */
+.app-region-drag {
+  -webkit-app-region: drag;
+}
+
+.app-region-no-drag {
+  -webkit-app-region: no-drag;
+}
