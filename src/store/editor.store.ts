@@ -9,6 +9,7 @@ import {
 } from '../types/editor.types';
 import { CursorEvent, CursorSettings, ZoomKeyframe } from '../types/cursor.types';
 import { BACKGROUND_PRESETS } from '../utils/presets';
+import { MACBOOK_WALLPAPERS } from '../utils/wallpapers';
 
 interface EditorStore {
   // Project State
@@ -88,27 +89,28 @@ interface EditorStore {
 }
 
 const defaultBackground: BackgroundSettings = {
-  type: 'gradient',
-  color: '#7928CA',
+  type: 'image',
+  color: '#14061F',
   gradient: {
-    start: '#7928CA',
-    end: '#FF0080',
+    start: '#9A3412',
+    end: '#FCD34D',
     angle: 135,
-    preset: 'purple-nebula'
+    preset: 'mac-sonoma'
   },
+  imageUrl: MACBOOK_WALLPAPERS.sonomaHorizon,
   blurAmount: 0,
   opacity: 1,
-  padding: 56
+  padding: 48
 };
 
 const defaultFrame: FrameSettings = {
-  mockup: 'macbook',
-  cornerRadius: 16,
-  shadowIntensity: 65,
-  shadowColor: 'rgba(0, 0, 0, 0.7)',
-  scale: 0.9,
-  borderWidth: 1,
-  borderColor: 'rgba(255, 255, 255, 0.12)',
+  mockup: 'none', // Default clean screen with NO MacBook header or browser header
+  cornerRadius: 12,
+  shadowIntensity: 45,
+  shadowColor: 'rgba(0, 0, 0, 0.65)',
+  scale: 0.92,
+  borderWidth: 0,
+  borderColor: 'transparent',
   aspectRatio: '16:9'
 };
 

@@ -1,13 +1,123 @@
 import { BackgroundSettings } from '../types/editor.types';
+import { MACBOOK_WALLPAPERS } from './wallpapers';
 
 export interface BackgroundPreset {
   id: string;
   name: string;
-  category: 'gradient' | 'solid' | 'abstract' | 'minimal';
+  category: 'wallpaper' | 'gradient' | 'solid' | 'abstract' | 'minimal';
+  thumbnailUrl?: string;
   settings: BackgroundSettings;
 }
 
 export const BACKGROUND_PRESETS: BackgroundPreset[] = [
+  // --- PREDEFINED MACBOOK / MACOS WALLPAPERS ---
+  {
+    id: 'mac-sonoma',
+    name: 'macOS Sonoma Horizon',
+    category: 'wallpaper',
+    thumbnailUrl: MACBOOK_WALLPAPERS.sonomaHorizon,
+    settings: {
+      type: 'image',
+      color: '#14061F',
+      gradient: { start: '#9A3412', end: '#FCD34D', angle: 135, preset: 'mac-sonoma' },
+      imageUrl: MACBOOK_WALLPAPERS.sonomaHorizon,
+      blurAmount: 0,
+      opacity: 1,
+      padding: 48
+    }
+  },
+  {
+    id: 'mac-ventura',
+    name: 'macOS Ventura Bloom',
+    category: 'wallpaper',
+    thumbnailUrl: MACBOOK_WALLPAPERS.venturaBloom,
+    settings: {
+      type: 'image',
+      color: '#020617',
+      gradient: { start: '#F97316', end: '#EF4444', angle: 135, preset: 'mac-ventura' },
+      imageUrl: MACBOOK_WALLPAPERS.venturaBloom,
+      blurAmount: 0,
+      opacity: 1,
+      padding: 48
+    }
+  },
+  {
+    id: 'mac-monterey',
+    name: 'macOS Monterey Waves',
+    category: 'wallpaper',
+    thumbnailUrl: MACBOOK_WALLPAPERS.montereyWaves,
+    settings: {
+      type: 'image',
+      color: '#090514',
+      gradient: { start: '#8B5CF6', end: '#3B82F6', angle: 135, preset: 'mac-monterey' },
+      imageUrl: MACBOOK_WALLPAPERS.montereyWaves,
+      blurAmount: 0,
+      opacity: 1,
+      padding: 48
+    }
+  },
+  {
+    id: 'mac-bigsur',
+    name: 'macOS Big Sur Peaks',
+    category: 'wallpaper',
+    thumbnailUrl: MACBOOK_WALLPAPERS.bigSurSpectrum,
+    settings: {
+      type: 'image',
+      color: '#1E3A8A',
+      gradient: { start: '#3B82F6', end: '#FBBF24', angle: 135, preset: 'mac-bigsur' },
+      imageUrl: MACBOOK_WALLPAPERS.bigSurSpectrum,
+      blurAmount: 0,
+      opacity: 1,
+      padding: 48
+    }
+  },
+  {
+    id: 'mac-mojave',
+    name: 'macOS Mojave Night',
+    category: 'wallpaper',
+    thumbnailUrl: MACBOOK_WALLPAPERS.mojaveNight,
+    settings: {
+      type: 'image',
+      color: '#020617',
+      gradient: { start: '#0B1329', end: '#172554', angle: 180, preset: 'mac-mojave' },
+      imageUrl: MACBOOK_WALLPAPERS.mojaveNight,
+      blurAmount: 0,
+      opacity: 1,
+      padding: 48
+    }
+  },
+  {
+    id: 'mac-studio',
+    name: 'Apple Studio Graphite',
+    category: 'wallpaper',
+    thumbnailUrl: MACBOOK_WALLPAPERS.studioGraphite,
+    settings: {
+      type: 'image',
+      color: '#1A1C22',
+      gradient: { start: '#2D3139', end: '#0D0E12', angle: 180, preset: 'mac-studio' },
+      imageUrl: MACBOOK_WALLPAPERS.studioGraphite,
+      blurAmount: 0,
+      opacity: 1,
+      padding: 48
+    }
+  },
+  {
+    id: 'mac-cupertino',
+    name: 'Cupertino Clean Glass',
+    category: 'wallpaper',
+    thumbnailUrl: MACBOOK_WALLPAPERS.cupertinoGlass,
+    settings: {
+      type: 'image',
+      color: '#E2E8F0',
+      gradient: { start: '#FFFFFF', end: '#CBD5E1', angle: 180, preset: 'mac-cupertino' },
+      imageUrl: MACBOOK_WALLPAPERS.cupertinoGlass,
+      blurAmount: 0,
+      opacity: 1,
+      padding: 48
+    }
+  },
+
+  // --- MODERN ABSTRACT & GRADIENTS ---
   {
     id: 'purple-nebula',
     name: 'Purple Nebula',
@@ -108,46 +218,10 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
       gradient: {
         start: '#252A36',
         end: '#181B22',
-        angle: 180,
+        angle: 180
       },
       blurAmount: 0,
       opacity: 1,
-      padding: 48
-    }
-  },
-  {
-    id: 'minimal-cream',
-    name: 'Minimal Light',
-    category: 'minimal',
-    settings: {
-      type: 'gradient',
-      color: '#F1F5F9',
-      gradient: {
-        start: '#FFFFFF',
-        end: '#E2E8F0',
-        angle: 180,
-        preset: 'minimal-cream'
-      },
-      blurAmount: 0,
-      opacity: 1,
-      padding: 48
-    }
-  },
-  {
-    id: 'abstract-mesh',
-    name: 'Cosmic Mesh',
-    category: 'abstract',
-    settings: {
-      type: 'gradient',
-      color: '#13111C',
-      gradient: {
-        start: '#8B5CF6',
-        end: '#EC4899',
-        angle: 45,
-        preset: 'abstract-mesh'
-      },
-      blurAmount: 20,
-      opacity: 0.9,
       padding: 48
     }
   }

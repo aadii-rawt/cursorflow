@@ -92,6 +92,14 @@ export const PreviewCanvas: React.FC = () => {
 
   // Background style computation
   const backgroundStyle = useMemo(() => {
+    if (background.type === 'image' && background.imageUrl) {
+      return {
+        backgroundImage: `url("${background.imageUrl}")`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      };
+    }
     if (background.type === 'solid') {
       return { backgroundColor: background.color };
     }
@@ -175,7 +183,7 @@ export const PreviewCanvas: React.FC = () => {
                 }}
                 className="relative w-full h-full flex items-center justify-center"
               >
-                {/* Real Recorded Video */}
+                {/* Real Recorded Video Screen */}
                 {project?.videoSrc ? (
                   <video
                     ref={videoRef}
@@ -184,40 +192,32 @@ export const PreviewCanvas: React.FC = () => {
                     className="w-full h-full object-contain"
                   />
                 ) : (
-                  // Fallback animated mock presentation canvas for demo
-                  <div className="w-full h-full bg-[#14151a] p-8 flex flex-col justify-between text-white select-none">
-                    <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-accent-purple/20 flex items-center justify-center text-accent-purple font-bold">
-                          C
+                  // Clean screen placeholder with no watermark or text
+                  <div className="w-full h-full bg-[#111216] flex items-center justify-center relative overflow-hidden select-none">
+                    <div className="w-full h-full p-8 flex flex-col justify-between">
+                      <div className="flex justify-between items-center opacity-60">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 rounded-md bg-accent-purple/20 flex items-center justify-center text-accent-purple text-xs font-bold">
+                            C
+                          </div>
+                          <span className="text-xs font-medium text-text-primary">Recorded Screen</span>
                         </div>
-                        <div>
-                          <h4 className="text-sm font-semibold">Cursorful Studio Engine</h4>
-                          <p className="text-[11px] text-text-muted">Dynamic Screen Interaction</p>
+                      </div>
+
+                      <div className="max-w-md mx-auto w-full grid grid-cols-2 gap-3 opacity-80">
+                        <div className="p-4 rounded-xl bg-card border border-card-border/60">
+                          <div className="text-xs text-text-muted">Cursor Focus</div>
+                          <div className="text-lg font-semibold mt-1 text-accent-sky">Centered</div>
+                        </div>
+                        <div className="p-4 rounded-xl bg-card border border-card-border/60">
+                          <div className="text-xs text-text-muted">Dynamic Camera</div>
+                          <div className="text-lg font-semibold mt-1 text-accent-purple">Active</div>
                         </div>
                       </div>
-                      <span className="text-xs bg-accent-purple/20 text-accent-purple px-2 py-0.5 rounded-md font-mono">
-                        Active Recording
-                      </span>
-                    </div>
 
-                    <div className="grid grid-cols-3 gap-4 my-auto">
-                      <div className="p-4 rounded-xl bg-card border border-card-border">
-                        <div className="text-xs text-text-muted">Auto Zoom Focus</div>
-                        <div className="text-xl font-bold mt-1 text-accent-sky">Centered</div>
+                      <div className="text-[11px] text-text-subtle text-center opacity-60">
+                        Scratch or play timeline to preview cursor zoom tracking
                       </div>
-                      <div className="p-4 rounded-xl bg-card border border-card-border">
-                        <div className="text-xs text-text-muted">Camera Pan</div>
-                        <div className="text-xl font-bold mt-1 text-accent-purple">Smooth Lerp</div>
-                      </div>
-                      <div className="p-4 rounded-xl bg-card border border-card-border">
-                        <div className="text-xs text-text-muted">Export Engine</div>
-                        <div className="text-xl font-bold mt-1 text-accent-emerald">60 FPS 4K</div>
-                      </div>
-                    </div>
-
-                    <div className="text-[11px] text-text-subtle text-center">
-                      Move timeline playhead to see synchronized cursor zoom in action
                     </div>
                   </div>
                 )}

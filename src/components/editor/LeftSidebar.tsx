@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   Palette,
   Laptop,
@@ -6,7 +6,9 @@ import {
   Sparkles,
   Layers,
   Sliders,
-  Volume2
+  Volume2,
+  Upload,
+  Image as ImageIcon
 } from 'lucide-react';
 import { useEditorStore } from '../../store/editor.store';
 import { BACKGROUND_PRESETS } from '../../utils/presets';
@@ -31,12 +33,33 @@ export const LeftSidebar: React.FC = () => {
     setIsMuted
   } = useEditorStore();
 
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const dataUrl = event.target?.result as string;
+        setBackground({
+          type: 'image',
+          imageUrl: dataUrl,
+          gradient: { ...background.gradient, preset: undefined }
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const tabs = [
     { id: 'background', label: 'Background', icon: Palette },
     { id: 'frame', label: 'Frame', icon: Laptop },
     { id: 'cursor', label: 'Cursor & Zoom', icon: MousePointer },
     { id: 'audio', label: 'Audio', icon: Volume2 }
   ] as const;
+
+  const macbookWallpapers = BACKGROUND_PRESETS.filter((p) => p.category === 'wallpaper');
+  const otherPresets = BACKGROUND_PRESETS.filter((p) => p.category !== 'wallpaper');
 
   return (
     <aside className="w-80 border-r border-card-border/80 bg-card/60 backdrop-blur-md flex flex-col h-full select-none">
@@ -68,11 +91,74 @@ export const LeftSidebar: React.FC = () => {
         {/* TAB 1: BACKGROUND */}
         {activeTab === 'background' && (
           <div className="space-y-5">
+            {/* 1. Predefined MacBook Wallpapers */}
             <div>
-              <label className="text-xs font-semibold text-text-primary block mb-2">Preset Themes</label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-xs font-semibold text-text-primary flex items-center gap-1.5">
+                  <ImageIcon className="w-3.5 h-3.5 text-accent-sky" />
+                  <span>MacBook Wallpapers</span>
+                </label>
+                <span className="text-[10px] text-accent-sky font-medium">Apple Themes</span>
+              </div>
+
               <div className="grid grid-cols-2 gap-2">
-                {BACKGROUND_PRESETS.map((p) => {
-                  const isSelected = background.gradient.preset === p.id;
+                {macbookWallpapers.map((p) => {
+                  const isSelected = background.gradient.preset === p.id || background.imageUrl === p.settings.imageUrl;
+                  return (
+                    <button
+                      key={p.id}
+                      onClick={() => applyBackgroundPreset(p.id)}
+                      className={clsx(
+                        'flex flex-col rounded-xl border text-left overflow-hidden transition-all group',
+                        isSelected
+                          ? 'border-accent-purple ring-2 ring-accent-purple bg-secondary shadow-md'
+                          : 'border-card-border hover:border-card-border/80 hover:bg-secondary/60'
+                      )}
+                    >
+                      <div className="w-full aspect-video bg-black/40 overflow-hidden relative">
+                        {p.thumbnailUrl && (
+                          <img
+                            src={p.thumbnailUrl}
+                            alt={p.name}
+                            className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                          />
+                        )}
+                      </div>
+                      <div className="p-1.5 bg-secondary/80">
+                        <span className="text-[10px] font-medium text-text-primary line-clamp-1">
+                          {p.name}
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 2. Upload Custom Image Wallpaper */}
+            <div className="pt-2 border-t border-card-border/60">
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="w-full py-2.5 px-3 rounded-xl border border-dashed border-card-border hover:border-accent-purple hover:bg-secondary/70 flex items-center justify-center gap-2 text-xs font-medium text-text-primary transition-all"
+              >
+                <Upload className="w-4 h-4 text-accent-purple" />
+                <span>Upload Custom Wallpaper</span>
+              </button>
+            </div>
+
+            {/* 3. Gradient Presets */}
+            <div className="pt-2 border-t border-card-border/60">
+              <label className="text-xs font-semibold text-text-primary block mb-2">Designer Gradients</label>
+              <div className="grid grid-cols-2 gap-2">
+                {otherPresets.map((p) => {
+                  const isSelected = background.gradient.preset === p.id && background.type !== 'image';
                   return (
                     <button
                       key={p.id}
@@ -185,13 +271,13 @@ export const LeftSidebar: React.FC = () => {
         {activeTab === 'frame' && (
           <div className="space-y-5">
             <div>
-              <label className="text-xs font-semibold text-text-primary block mb-2">Device Mockup</label>
-              <div className="grid grid-cols-2 gap-2">
+              <label className="text-xs font-semibold text-text-primary block mb-2">Screen Frame Style</label>
+              <div className="grid grid-cols-1 gap-2">
                 {[
-                  { id: 'macbook', label: 'MacBook Pro' },
-                  { id: 'browser', label: 'Browser Window' },
-                  { id: 'minimal', label: 'Minimal Glass' },
-                  { id: 'none', label: 'Clean Borderless' }
+                  { id: 'none', label: 'Clean Screen (No Header)', desc: 'Pure recorded screen with smooth rounded corners' },
+                  { id: 'minimal', label: 'Minimal Glass Border', desc: 'Subtle translucent frame border' },
+                  { id: 'browser', label: 'Browser Window Header', desc: 'Modern browser URL address bar and tabs' },
+                  { id: 'macbook', label: 'MacBook Bar', desc: 'Classic macOS window header with traffic lights' }
                 ].map((item) => (
                   <button
                     key={item.id}
@@ -199,11 +285,12 @@ export const LeftSidebar: React.FC = () => {
                     className={clsx(
                       'p-2.5 rounded-xl border text-xs font-medium transition-all text-left',
                       frame.mockup === item.id
-                        ? 'border-accent-purple bg-accent-purple/10 text-white ring-1 ring-accent-purple/50'
+                        ? 'border-accent-purple bg-accent-purple/10 text-text-primary ring-1 ring-accent-purple/50'
                         : 'border-card-border hover:bg-secondary text-text-muted'
                     )}
                   >
-                    {item.label}
+                    <div className="text-xs font-semibold text-text-primary">{item.label}</div>
+                    <div className="text-[10px] text-text-subtle">{item.desc}</div>
                   </button>
                 ))}
               </div>

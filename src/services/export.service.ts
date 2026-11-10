@@ -80,6 +80,19 @@ export class ExportService {
 
     recorder.start(500);
 
+    // Pre-load background image if set
+    let bgImage: HTMLImageElement | null = null;
+    if (background.type === 'image' && background.imageUrl) {
+      bgImage = new Image();
+      bgImage.src = background.imageUrl;
+      await new Promise<void>((resolve) => {
+        if (bgImage!.complete) return resolve();
+        bgImage!.onload = () => resolve();
+        bgImage!.onerror = () => resolve();
+        setTimeout(resolve, 500);
+      });
+    }
+
     const frameInterval = 1 / fps;
     let currentFrame = 0;
     const startRenderTime = performance.now();
@@ -104,7 +117,7 @@ export class ExportService {
       });
 
       // Composite the frame
-      this.renderFrame(ctx, videoElement, t, width, height, background, frame, cursorSettings, cursorEvents, zoomKeyframes);
+      this.renderFrame(ctx, videoElement, t, width, height, background, frame, cursorSettings, cursorEvents, zoomKeyframes, bgImage);
 
       currentFrame++;
       const progressPercent = Math.min(99, Math.round((currentFrame / totalFrames) * 100));
@@ -174,12 +187,15 @@ export class ExportService {
     frame: FrameSettings,
     cursorSettings: CursorSettings,
     cursorEvents: CursorEvent[],
-    zoomKeyframes: ZoomKeyframe[]
+    zoomKeyframes: ZoomKeyframe[],
+    bgImage?: HTMLImageElement | null
   ) {
     ctx.clearRect(0, 0, canvasW, canvasH);
 
     // 1. Draw Background
-    if (background.type === 'solid') {
+    if (background.type === 'image' && bgImage && bgImage.complete && bgImage.naturalWidth > 0) {
+      ctx.drawImage(bgImage, 0, 0, canvasW, canvasH);
+    } else if (background.type === 'solid') {
       ctx.fillStyle = background.color;
       ctx.fillRect(0, 0, canvasW, canvasH);
     } else if (background.type === 'gradient') {
